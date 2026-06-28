@@ -14,6 +14,6 @@
     <Project Path="src/DavidGroup.Core.CompositionExtensions/DavidGroup.Core.CompositionExtensions.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/DavidGroup.Core.CompositionExtensions/DavidGroup.Core.CompositionExtensionsTests.csproj" />
+    <Project Path="tests/DavidGroup.Core.CompositionExtensions.Tests/DavidGroup.Core.CompositionExtensions.Tests.csproj" />
   </Folder>
 </Solution>
