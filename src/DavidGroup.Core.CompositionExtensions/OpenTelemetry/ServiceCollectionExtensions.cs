@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
     /// <remarks>
     /// This method configures:
     /// <list type="bullet">
-    /// <item>Resource information using <see cref="serviceName"/>.</item>
+    /// <item>Resource information using serviceName or executed assembly name if serviceName is not specified.</item>
     /// <item>Tracing for ASP.NET Core, HTTP client, Entity Framework Core, and gRPC clients.</item>
     /// <item>Metrics for ASP.NET Core and HTTP client.</item>
     /// <item>OTLP exporters for both tracing and metrics.</item>
