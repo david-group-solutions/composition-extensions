@@ -27,28 +27,32 @@ jobs:
         working-directory: ./
         run: dotnet build -c Release /p:ContinuousIntegrationBuild=true
 
-  test:
-    name: Tests on ${{ matrix.os }}
-    needs: [ build ]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ macos-26, ubuntu-latest, windows-latest ]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+  #########################################################################################
+  # Uncomment if tests are added
+  #########################################################################################
+  #
+  # test:
+  #   name: Tests on ${{ matrix.os }}
+  #   needs: [ build ]
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [ macos-26, ubuntu-latest, windows-latest ]
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v7
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: |
-              8.0.x
-              9.0.x
-              10.0.x
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v5
+  #       with:
+  #         dotnet-version: |
+  #             8.0.x
+  #             9.0.x
+  #             10.0.x
 
-      - name: Test
-        working-directory: ./
-        run: dotnet test --logger:trx --logger:GitHubActions
+  #     - name: Test
+  #       working-directory: ./
+  #       run: dotnet test --logger:trx --logger:GitHubActions
 
   update_release_draft:
     name: Release Drafter
