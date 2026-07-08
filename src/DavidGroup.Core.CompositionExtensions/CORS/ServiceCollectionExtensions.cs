@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add CORS services to.</param>
     /// <param name="configuration">The <see cref="IConfiguration"/> instance containing CORS settings.</param>
     /// <remarks>
-    /// Reads <see cref="ApplicationCorsOptions"/> from configuration and sets up a default CORS policy:
+    /// Reads <see cref="ApplicationCorsOptions"/> from configuration from <c>CorsOptions</c> section and sets up a default CORS policy:
     /// <list type="bullet">
     /// <item>Allows any header or only those specified in AllowedHeaders.</item>
     /// <item>Allows any method or only those specified in AllowedMethods.</item>
@@ -26,7 +26,7 @@ public static class ServiceCollectionExtensions
     public static void AddCorsFromConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         ApplicationCorsOptions corsOptions = configuration
-                                                 .GetSection(nameof(ApplicationCorsOptions))
+                                                 .GetSection(ApplicationCorsOptions.SectionName)
                                                  .Get<ApplicationCorsOptions>()
                                              ?? throw new InvalidOperationException("Cors options not found in configuration.");
 
