@@ -8,6 +8,11 @@ namespace DavidGroup.Core.CompositionExtensions.CORS;
 public class ApplicationCorsOptions
 {
     /// <summary>
+    /// The section name in appsettings.json
+    /// </summary>
+    public const string SectionName = "CorsOptions";
+
+    /// <summary>
     /// Which origins are allowed to access resource.
     /// </summary>
     /// <remarks>Use ';' to separate multiple values.</remarks>
