@@ -19,6 +19,8 @@
 
     <RepositoryUrl>https://github.com/david-group-solutions/composition-extensions</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    
+    <NoWarn>NU5104</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
