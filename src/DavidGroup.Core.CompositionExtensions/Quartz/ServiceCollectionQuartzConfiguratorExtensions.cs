@@ -23,7 +23,7 @@ public static class ServiceCollectionQuartzConfiguratorExtensions
     /// <item>Adds a trigger for the job using the provided Cron schedule.</item>
     /// </list>
     /// </remarks>
-    public static void AddCronJobAndTrigger<T>(this IServiceCollectionQuartzConfigurator quartz,
+    public static IServiceCollectionQuartzConfigurator AddCronJobAndTrigger<T>(this IServiceCollectionQuartzConfigurator quartz,
         string? cronSchedule,
         Action<CronScheduleBuilder>? action = null)
         where T : IJob
@@ -40,5 +40,7 @@ public static class ServiceCollectionQuartzConfiguratorExtensions
             .WithIdentity(jobName + "-trigger")
             .WithCronSchedule(cronSchedule, action)
         );
+
+        return quartz;
     }
 }
