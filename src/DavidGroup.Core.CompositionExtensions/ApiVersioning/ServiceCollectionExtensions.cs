@@ -9,11 +9,11 @@ namespace DavidGroup.Core.CompositionExtensions.ApiVersioning;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-
     /// <summary>
     /// Configures default API versioning and versioned API explorer for the application.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add API versioning services to.</param>
+    /// <returns><see cref="IServiceCollection"/> for chaining.</returns>
     /// <remarks>
     /// Sets up:
     /// <list type="bullet">
@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
     /// <item>Configures the versioned API explorer to generate documentation groups with format "v{major}.{minor}".</item>
     /// </list>
     /// </remarks>
-    public static void AddDefaultApiVersioning(this IServiceCollection services)
+    public static IServiceCollection AddDefaultApiVersioning(this IServiceCollection services)
     {
         services.AddApiVersioning(opt =>
             {
@@ -43,5 +43,7 @@ public static class ServiceCollectionExtensions
                 opt.GroupNameFormat = "'v'VVV";
                 opt.SubstituteApiVersionInUrl = true;
             });
+
+        return services;
     }
 }

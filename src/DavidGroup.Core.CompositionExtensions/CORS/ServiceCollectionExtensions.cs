@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add CORS services to.</param>
     /// <param name="configuration">The <see cref="IConfiguration"/> instance containing CORS settings.</param>
+    /// <returns><see cref="IServiceCollection"/> for chaining.</returns>
     /// <remarks>
     /// Reads <see cref="ApplicationCorsOptions"/> from configuration from <c>CorsOptions</c> section and sets up a default CORS policy:
     /// <list type="bullet">
@@ -23,7 +24,7 @@ public static class ServiceCollectionExtensions
     /// </list>
     /// </remarks>
     /// <exception cref="InvalidOperationException">Thrown if the CORS configuration section is missing or invalid.</exception>
-    public static void AddCorsFromConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCorsFromConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         ApplicationCorsOptions corsOptions = configuration
                                                  .GetSection(ApplicationCorsOptions.SectionName)
@@ -49,5 +50,7 @@ public static class ServiceCollectionExtensions
                 policy.AllowCredentials();
             })
         );
+
+        return services;
     }
 }
