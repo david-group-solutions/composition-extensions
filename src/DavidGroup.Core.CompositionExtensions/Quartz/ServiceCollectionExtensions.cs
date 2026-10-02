@@ -33,7 +33,42 @@ public static class ServiceCollectionExtensions
     /// <item>A hosted service that waits for jobs to complete on application shutdown.</item>
     /// </list>
     /// </remarks>
-    public static IServiceCollection AddQuartzDefaults(this IServiceCollection services,
+#if NET10_0_OR_GREATER
+    public static IServiceCollection AddQuartzDefaults(
+        this IServiceCollection services,
+        Action<IPersistentStoreBuilder>? configurePersistentStore = null,
+        params QuartzJobRegistration[] jobs)
+    {
+        services.AddQuartz(quartz =>
+        {
+            if (configurePersistentStore is not null)
+            {
+                quartz.UsePersistentStore(store =>
+                {
+                    store.UseNewtonsoftJsonSerializer();
+
+                    store.ConfigureStore(options =>
+                    {
+                        options.TablePrefix = "quartz.QRTZ_";
+                    });
+
+                    store.UseClustering();
+
+                    configurePersistentStore.Invoke(store);
+                });
+            }
+
+            foreach (QuartzJobRegistration job in jobs)
+                job(quartz);
+        });
+
+        services.AddQuartzHostedService(opt => { opt.WaitForJobsToComplete = true; });
+
+        return services;
+    }
+#else
+    public static IServiceCollection AddQuartzDefaults(
+        this IServiceCollection services,
         Action<SchedulerBuilder.PersistentStoreOptions>? configurePersistentStore = null,
         params QuartzJobRegistration[] jobs)
     {
@@ -61,7 +96,7 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-
+#endif
     /// <summary>
     /// Adds default Quartz.NET with SQL Server persistant store.
     /// </summary>
@@ -86,7 +121,8 @@ public static class ServiceCollectionExtensions
     /// <item>A hosted service that waits for jobs to complete on application shutdown.</item>
     /// </list>
     /// </remarks>
-    public static IServiceCollection AddQuartzDefaultsWithSqlServer(this IServiceCollection services,
+    public static IServiceCollection AddQuartzDefaultsWithSqlServer(
+        this IServiceCollection services,
         string? connectionString,
         params QuartzJobRegistration[] jobs)
     {
@@ -95,18 +131,25 @@ public static class ServiceCollectionExtensions
         services.AddQuartzDefaults(
             store => store.UseSqlServer(sqlServerOptions =>
             {
-                sqlServerOptions.UseDriverDelegate<SqlServerDelegate>();
                 sqlServerOptions.ConnectionString = connectionString;
-                sqlServerOptions.TablePrefix = "quartz.QRTZ_";
             }),
             jobs);
 
         return services;
     }
 
+
+#if NET10_0_OR_GREATER
+    /// <summary>
+    /// Delegate type for registering Quartz jobs using an <see cref="IQuartzBuilder"/>.
+    /// </summary>
+    /// <param name="quartz">The <see cref="IQuartzBuilder"/> used to configure jobs and triggers.</param>
+    public delegate void QuartzJobRegistration(IQuartzBuilder quartz);
+#else
     /// <summary>
     /// Delegate type for registering Quartz jobs using an <see cref="IServiceCollectionQuartzConfigurator"/>.
     /// </summary>
     /// <param name="quartz">The <see cref="IServiceCollectionQuartzConfigurator"/> used to configure jobs and triggers.</param>
     public delegate void QuartzJobRegistration(IServiceCollectionQuartzConfigurator quartz);
+#endif
 }

@@ -4,7 +4,7 @@ namespace DavidGroup.Core.CompositionExtensions.Samples.WebApi.Jobs;
 
 public sealed class CleanupJob(ILogger<CleanupJob> logger) : IJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         if (logger.IsEnabled(LogLevel.Information))
         {
@@ -15,12 +15,12 @@ public sealed class CleanupJob(ILogger<CleanupJob> logger) : IJob
         }
 
         // Simulate cleanup work.
-        await Task.Delay(TimeSpan.FromSeconds(2), context.CancellationToken);
+        await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
 
         if (logger.IsEnabled(LogLevel.Information))
         {
             logger.LogInformation(
-                "Cleanup job completed at {CompletedAt}.",
+                "Cleanup job completed at {CompletedAt}",
                 DateTimeOffset.UtcNow);
         }
     }
