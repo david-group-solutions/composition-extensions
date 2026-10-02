@@ -122,7 +122,7 @@ builder.Services.AddQuartzDefaults(
 ```csharp
 public sealed class CleanupJob : IJob
 {
-    public Task Execute(IJobExecutionContext context)
+    public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         // Execute scheduled work.
         return Task.CompletedTask;
