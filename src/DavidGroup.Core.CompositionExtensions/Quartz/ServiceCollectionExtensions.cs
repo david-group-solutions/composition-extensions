@@ -43,6 +43,11 @@ public static class ServiceCollectionExtensions
         {
             if (configurePersistentStore is not null)
             {
+                quartz.ConfigureScheduler(options =>
+                {
+                    options.GenerateInstanceId = true;
+                });
+
                 quartz.UsePersistentStore(store =>
                 {
                     store.UseNewtonsoftJsonSerializer();
@@ -76,6 +81,8 @@ public static class ServiceCollectionExtensions
         {
             if (configurePersistentStore is not null)
             {
+                quartz.SchedulerId = "AUTO";
+
                 quartz.UsePersistentStore(store =>
                 {
                     store.UseProperties = false;
